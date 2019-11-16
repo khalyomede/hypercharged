@@ -1,0 +1,11 @@
+node_modules
+.stryker-temp
+stryker.log
+yarn-error.log
+nyc-output
+coverage
+.*
+!.babelrc
+!.browserslistrc
+!.gitignore
+!.prettierrc

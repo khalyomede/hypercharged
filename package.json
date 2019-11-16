@@ -1,0 +1,53 @@
+{
+    "name": "hypercharged",
+    "version": "0.1.0",
+    "description": "Generates a prerendered site from your original website.",
+    "main": "lib/index.js",
+    "repository": "https://github.com/khalyomede/hypercharged",
+    "author": "Khalyomede <khalyomede@gmail.com>",
+    "license": "MIT",
+    "private": false,
+    "devDependencies": {
+        "@babel/core": "7.*",
+        "@babel/preset-env": "7.*",
+        "@babel/preset-typescript": "7.*",
+        "@babel/register": "7.*",
+        "@stryker-mutator/babel-transpiler": "^2.3.0",
+        "@stryker-mutator/core": "^2.3.0",
+        "@stryker-mutator/javascript-mutator": "^2.3.0",
+        "@stryker-mutator/mocha-framework": "^2.3.0",
+        "@stryker-mutator/mocha-runner": "^2.3.0",
+        "@stryker-mutator/typescript": "^2.3.0",
+        "@types/node": "12.*",
+        "chai": "4.*",
+        "chai-as-promised": "7.*",
+        "glob": "7.*",
+        "gulp": "4.*",
+        "gulp-babel": "8.*",
+        "gulp-npm-check": "1.*",
+        "gulp-plumber": "1.*",
+        "gulp-typescript": "5.*",
+        "is-directory": "0.*",
+        "mocha": "6.*",
+        "mocha-sinon": "2.*",
+        "nyc": "14.*",
+        "rimraf": "3.*",
+        "sinon": "7.*",
+        "stryker-cli": "1.*",
+        "typescript": "3.*"
+    },
+    "scripts": {
+        "build": "gulp build",
+        "test": "nyc --reporter=lcov mocha --require @babel/register --recursive test",
+        "mutate": "stryker run",
+        "jest": "jest test"
+    },
+    "dependencies": {
+        "@hapi/joi": "16.*",
+        "mkdirp": "0.*",
+        "puppeteer": "2.*"
+    },
+    "files": [
+        "lib/index.js"
+    ]
+}
