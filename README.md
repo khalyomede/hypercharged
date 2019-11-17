@@ -71,7 +71,6 @@ const hypercharged = new Hypercharged({
     },
 });
 
-hypercharged.enableDebug();
 hypercharged.addUrl("/");
 
 (async () => {
@@ -109,7 +108,6 @@ const hypercharged = new Hypercharged({
     },
 });
 
-hypercharged.enableDebug();
 hypercharged.addUrl("/");
 
 (async () => {
@@ -148,7 +146,6 @@ const hypercharged = new Hypercharged({
     },
 });
 
-hypercharged.enableDebug();
 hypercharged.addUrls(["/", "/about", "/contact-us"]);
 
 (async () => {
@@ -193,7 +190,6 @@ const hypercharged = new Hypercharged({
     },
 });
 
-hypercharged.enableDebug();
 hypercharged.addUrl("/", async function(page) {
     await page.waitForNavigation({
         waitUntil: "networkidle0",
