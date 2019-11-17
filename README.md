@@ -2,7 +2,7 @@
 
 Generates a prerendered site from your original website.
 
-[![npm](https://img.shields.io/npm/v/hypercharged)](https://www.npmjs.com/package/hypercharged) [![npm (prod) dependency version](https://img.shields.io/npm/dependency-version/hypercharged/puppeteer)](https://www.npmjs.com/package/puppeteer) [![Build Status](https://travis-ci.com/khalyomede/hypercharged.svg?branch=master)](https://travis-ci.com/khalyomede/hypercharged)
+[![npm](https://img.shields.io/npm/v/hypercharged)](https://www.npmjs.com/package/hypercharged) [![npm (prod) dependency version](https://img.shields.io/npm/dependency-version/hypercharged/puppeteer)](https://www.npmjs.com/package/puppeteer) [![Build Status](https://travis-ci.com/khalyomede/hypercharged.svg?branch=master)](https://travis-ci.com/khalyomede/hypercharged) [![Maintainability](https://api.codeclimate.com/v1/badges/fdd6b022afedcefeeefe/maintainability)](https://codeclimate.com/github/khalyomede/hypercharged/maintainability)
 [![Known Vulnerabilities](https://snyk.io/test/github/khalyomede/hypercharged/badge.svg?targetFile=package.json)](https://snyk.io/test/github/khalyomede/hypercharged?targetFile=package.json) [![NPM](https://img.shields.io/npm/l/hypercharged)](https://github.com/khalyomede/hypercharged/blob/master/LICENSE)
 
 ## Summary
