@@ -37,7 +37,6 @@
         "gulp-npm-check": "1.*",
         "gulp-plumber": "1.*",
         "gulp-typescript": "5.*",
-        "is-directory": "0.*",
         "mocha": "6.*",
         "mocha-sinon": "2.*",
         "nyc": "14.*",
@@ -55,6 +54,7 @@
     },
     "dependencies": {
         "@hapi/joi": "16.*",
+        "is-directory": "0.*",
         "mkdirp": "0.*",
         "puppeteer": "2.*"
     },
