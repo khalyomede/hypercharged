@@ -49,6 +49,8 @@ yarn add --dev puppeteer hypercharged
 -   [2. Create the output folder if it does not exist](#2-create-the-output-folder-if-it-does-not-exist)
 -   [3. Generating multiple files](#3-generating-multiple-files)
 -   [4. Using custom puppeteer command before starting to copy the HTML content](#4-using-custom-puppeteer-command-before-starting-to-copy-the-html-content)
+-   [5. Passing options before rendering](#5-passing-options-before-rendering)
+-   [6. Enable the debug mode to print what is Hypercharged doing](#6-enable-the-debug-mode-to-print-what-is-hypercharged-doing)
 
 ### 1. Simple usage
 
@@ -214,4 +216,71 @@ your-project
 ├── index.js
 ├── package.json
 └── package-lock.json
+```
+
+### 5. Passing options before rendering
+
+Hypercharged runs a Chrome instance in headless mode using puppeteer. You can add custom options to pass to this library before it launches a healess driven Chrome instance.
+
+In this example we will tell puppeteer to show the Chrome window while it runs. This is very interesting to troubleshoot issues and understand why something is not going like expected.
+
+```javascript
+const Hypercharged = require("../lib/index").default;
+// import Hypercharged from "hypercharged";
+
+const hypercharged = new Hypercharged({
+    input: {
+        url: "http://example.com",
+    },
+    output: {
+        folder: {
+            path: __dirname,
+        },
+    },
+});
+
+hypercharged.addUrl("/");
+
+(async () => {
+    await hypercharged.render({
+        headless: false,
+    });
+})();
+```
+
+You can learn more about which options you can use by reading the [documentation on `puppeteer.launch()` options](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions). `puppeteer.launch()` is the method Hypercharged uses to start a Chrome instance to get your pages content.
+
+### 6. Enable the debug mode to print what is Hypercharged doing
+
+In this example, we will activate the debug mode to see in the console what is happening with your urls.
+
+```javascript
+const Hypercharged = require("../lib/index").default;
+// import Hypercharged from "hypercharged";
+
+const hypercharged = new Hypercharged({
+    input: {
+        url: "http://example.com",
+    },
+    output: {
+        folder: {
+            path: __dirname,
+        },
+    },
+});
+
+hypercharged.addUrls(["/", "/about"]);
+
+(async () => {
+    await hypercharged.render();
+})();
+```
+
+Result in console:
+
+```bash
+rendering /...
+rendered
+rendering /about...
+rendered
 ```
