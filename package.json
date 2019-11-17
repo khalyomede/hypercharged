@@ -40,6 +40,7 @@
         "mocha": "6.*",
         "mocha-sinon": "2.*",
         "nyc": "14.*",
+        "puppeteer": "2.*",
         "rimraf": "3.*",
         "sinon": "7.*",
         "stryker-cli": "1.*",
@@ -55,8 +56,7 @@
     "dependencies": {
         "@hapi/joi": "16.*",
         "is-directory": "0.*",
-        "mkdirp": "0.*",
-        "puppeteer": "2.*"
+        "mkdirp": "0.*"
     },
     "files": [
         "lib/index.js"
