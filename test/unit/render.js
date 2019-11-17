@@ -127,6 +127,34 @@ describe(".render()", function() {
         expect(console.log.calledWith("rendered"));
     });
 
+    it("should print an error if the custom algorithm to put the web page on hold has thrown an exception", async function() {
+        this.timeout(40000);
+
+        await new Hypercharged({
+            input: {
+                url: "http://example.com",
+            },
+            output: {
+                folder: {
+                    path: __dirname,
+                },
+            },
+        })
+            .addUrl("/", async page => {
+                await page.waitFor(".card", {
+                    timeout: 1,
+                });
+            })
+            .enableDebug()
+            .render();
+
+        expect(
+            console.log.calledWith(
+                "an error occurred while running your algorithm to put the web page on hold",
+            ),
+        ).to.be.true;
+    });
+
     it("should create the folder if it does not exists", async function() {
         this.timeout(10000);
 

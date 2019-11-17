@@ -236,7 +236,18 @@ class Hypercharged {
                     continue;
                 }
 
-                await this.callbacks[url](page);
+                try {
+                    await this.callbacks[url](page);
+                } catch (exception) {
+                    if (this.debug) {
+                        console.log(
+                            "an error occurred while running your algorithm to put the web page on hold",
+                        );
+                        console.log(exception);
+                    }
+
+                    continue;
+                }
 
                 const content = await page.content();
 
