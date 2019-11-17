@@ -51,7 +51,6 @@
         "build": "gulp build",
         "test": "nyc --reporter=lcov mocha --require @babel/register --recursive test",
         "mutate": "stryker run",
-        "jest": "jest test",
         "coverage": "codecov",
         "release": "np"
     },
