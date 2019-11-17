@@ -123,8 +123,9 @@ describe(".render()", function() {
             .enableDebug()
             .render();
 
-        expect(console.log.calledWith("rendering /..."));
-        expect(console.log.calledWith("rendered"));
+        expect(console.log.calledWith("rendering /wiki/Main_Page...")).to.be
+            .true;
+        expect(console.log.calledWith("rendered")).to.be.true;
     });
 
     it("should print an error if the custom algorithm to put the web page on hold has thrown an exception", async function() {
