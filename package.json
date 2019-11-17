@@ -21,6 +21,7 @@
         "@types/node": "12.*",
         "chai": "4.*",
         "chai-as-promised": "7.*",
+        "codecov": "3.*",
         "glob": "7.*",
         "gulp": "4.*",
         "gulp-babel": "8.*",
@@ -40,7 +41,8 @@
         "build": "gulp build",
         "test": "nyc --reporter=lcov mocha --require @babel/register --recursive test",
         "mutate": "stryker run",
-        "jest": "jest test"
+        "jest": "jest test",
+        "coverage": "codecov"
     },
     "dependencies": {
         "@hapi/joi": "16.*",
