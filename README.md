@@ -36,6 +36,9 @@ yarn add --dev hypercharged
 ## Usage
 
 -   [1. Simple usage](#1-simple-usage)
+-   [2. Create the output folder if it does not exist](#2-create-the-output-folder-if-it-does-not-exist)
+-   [3. Generating multiple files](#3-generating-multiple-files)
+-   [4. Using custom puppeteer command before starting to copy the HTML content](#4-using-custom-puppeteer-command-before-starting-to-copy-the-html-content)
 
 ### 1. Simple usage
 
@@ -156,7 +159,7 @@ your-project
 └── package-lock.json
 ```
 
-### 3. Using custom puppeteer command before starting to copy the HTML content
+### 4. Using custom puppeteer command before starting to copy the HTML content
 
 If, like me, you are building a single page application, or any other website that relies on Javascript to generate content dynamically, you might be annoyed by the fact that Hypercharged will not wait that your page has finished to execute Javascript before copying the HTML content.
 
