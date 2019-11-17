@@ -9,3 +9,5 @@ coverage
 !.browserslistrc
 !.gitignore
 !.prettierrc
+!.travis.yml
+!.codeclimate.yml
