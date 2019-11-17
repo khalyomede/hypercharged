@@ -5,6 +5,15 @@
     "main": "lib/index.js",
     "repository": "https://github.com/khalyomede/hypercharged",
     "author": "Khalyomede <khalyomede@gmail.com>",
+    "keywords": [
+        "prerender",
+        "prerendering",
+        "render",
+        "rendering",
+        "html",
+        "puppeteer",
+        "single-page-applications"
+    ],
     "license": "MIT",
     "private": false,
     "devDependencies": {
