@@ -2,7 +2,7 @@
 
 Generates a prerendered site from your original website.
 
-[![npm](https://img.shields.io/npm/v/hypercharged)](https://www.npmjs.com/package/hypercharged) [![npm (prod) dependency version](https://img.shields.io/npm/dependency-version/hypercharged/puppeteer)](https://www.npmjs.com/package/puppeteer) [![Build Status](https://travis-ci.com/khalyomede/hypercharged.svg?branch=master)](https://travis-ci.com/khalyomede/hypercharged) [![codecov](https://codecov.io/gh/khalyomede/hypercharged/branch/master/graph/badge.svg)](https://codecov.io/gh/khalyomede/hypercharged) [![Stryker mutation score](https://badge.stryker-mutator.io/github.com/khalyomede/hypercharged/master)](https://badge.stryker-mutator.io/github.com/khalyomede/hypercharged/master) [![Maintainability](https://api.codeclimate.com/v1/badges/fdd6b022afedcefeeefe/maintainability)](https://codeclimate.com/github/khalyomede/hypercharged/maintainability)
+[![npm](https://img.shields.io/npm/v/hypercharged)](https://www.npmjs.com/package/hypercharged) [![npm dev dependency version](https://img.shields.io/npm/dependency-version/hypercharged/dev/puppeteer)](https://www.npmjs.com/package/puppeteer) [![Build Status](https://travis-ci.com/khalyomede/hypercharged.svg?branch=master)](https://travis-ci.com/khalyomede/hypercharged) [![codecov](https://codecov.io/gh/khalyomede/hypercharged/branch/master/graph/badge.svg)](https://codecov.io/gh/khalyomede/hypercharged) [![Stryker mutation score](https://badge.stryker-mutator.io/github.com/khalyomede/hypercharged/master)](https://badge.stryker-mutator.io/github.com/khalyomede/hypercharged/master) [![Maintainability](https://api.codeclimate.com/v1/badges/fdd6b022afedcefeeefe/maintainability)](https://codeclimate.com/github/khalyomede/hypercharged/maintainability)
 [![Known Vulnerabilities](https://snyk.io/test/github/khalyomede/hypercharged/badge.svg?targetFile=package.json)](https://snyk.io/test/github/khalyomede/hypercharged?targetFile=package.json) [![NPM](https://img.shields.io/npm/l/hypercharged)](https://github.com/khalyomede/hypercharged/blob/master/LICENSE)
 
 ## Summary
@@ -21,16 +21,26 @@ Open sourcing this project would eventually help me produce a better and more re
 
 ## Installation
 
+**Before starting**
+
+`puppeteer` will install a supported Chrome executable. It can use additional space so you should be aware of it as it can be a problem on operating system running with a low storage.
+
+If you need, you can use `puppeteer-core` and instruct it to use an existing Chrome instance. The only downside is if the version of your existing Chrome instance is not the same as the one puppeteer is tested, the behavior of this library will not be guaranteed anymore.
+
+Learn more about the difference [here](https://github.com/GoogleChrome/puppeteer/blob/v2.0.0/docs/api.md#puppeteer-vs-puppeteer-core).
+
+**Install the dependencies**
+
 With npm:
 
 ```bash
-npm install --save-dev hypercharged
+npm install --save-dev puppeteer hypercharged
 ```
 
 Or with Yarn:
 
 ```bash
-yarn add --dev hypercharged
+yarn add --dev puppeteer hypercharged
 ```
 
 ## Usage
