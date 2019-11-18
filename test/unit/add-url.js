@@ -32,6 +32,23 @@ describe(".addUrl()", function() {
         expect(hypercharged.addUrl("/").urls).to.deep.equal(["/"]);
     });
 
+    it("should correctly attach the callback to the url", function() {
+        const callback = async page => await page.waitForNavigation();
+
+        expect(
+            new Hypercharged({
+                input: {
+                    url: "http://example.com",
+                },
+                output: {
+                    folder: {
+                        path: "./",
+                    },
+                },
+            }).addUrl("/", callback).callbacks,
+        ).to.be.deep.equal({ "/": callback });
+    });
+
     it("should add the url if there already has some", function() {
         const hypercharged = new Hypercharged({
             input: {
@@ -47,6 +64,25 @@ describe(".addUrl()", function() {
         expect(
             hypercharged.addUrls(["/", "/about"]).addUrl("/contact-us").urls,
         ).to.be.deep.equal(["/", "/about", "/contact-us"]);
+    });
+
+    it("should attach the callback to the correct url if there already has some", function() {
+        const callback = async page => await page.waitForNavigation();
+        const hypercharged = new Hypercharged({
+            input: {
+                url: "http://example.com",
+            },
+            output: {
+                folder: {
+                    path: "./",
+                },
+            },
+        })
+            .addUrl("/")
+            .addUrl("/about", callback);
+
+        expect(hypercharged.callbacks["/about"]).to.be.equal(callback);
+        expect(hypercharged.callbacks["/"]).to.not.be.equal(callback);
     });
 
     it("should throw an Error if no parameter is given", function() {
@@ -107,5 +143,20 @@ describe(".addUrl()", function() {
                 },
             }).addUrl("pricing/enterprise");
         }).to.throw(`expected parameter "url" to be an absolute path`);
+    });
+
+    it(`should throw an Error if the parameter "callback" is not a Function`, function() {
+        expect(function() {
+            new Hypercharged({
+                input: {
+                    url: "http://example.com",
+                },
+                output: {
+                    folder: {
+                        path: "./",
+                    },
+                },
+            }).addUrl("/", 42);
+        }).to.throw(Error, `"value" must be of type function`);
     });
 });
