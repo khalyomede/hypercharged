@@ -90,6 +90,14 @@ class Hypercharged {
             throw new TypeError(error.message);
         }
 
+        const validation = Joi.function()
+            .required()
+            .validate(callback);
+
+        if (validation.error) {
+            throw new Error(validation.error.message);
+        }
+
         if (!isAbsolute(url)) {
             throw new Error(`expected parameter "url" to be an absolute path`);
         }
@@ -104,9 +112,13 @@ class Hypercharged {
      * Add multiples urls to prerender.
      *
      * @param {Array<string>} urls
+     * @param {Function} callback
      * @throws {Error} if the parameter "urls" is not valid.
      */
-    public addUrls(urls: Array<string>): Hypercharged {
+    public addUrls(
+        urls: Array<string>,
+        callback: Function = function() {},
+    ): Hypercharged {
         const { value, error } = Joi.array()
             .required()
             .items(Joi.string())
@@ -117,7 +129,7 @@ class Hypercharged {
         }
 
         for (const url of urls) {
-            this.addUrl(url);
+            this.addUrl(url, callback);
         }
 
         return this;
