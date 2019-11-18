@@ -280,3 +280,35 @@ rendered
 rendering /about...
 rendered
 ```
+
+### 7. Use an identical page hold function to a bunch of urls
+
+In this example, we have a lots of urls that needs a same "put the web page on hold" function before copying the content.
+
+```javascript
+const Hypercharged = require("../lib/index").default;
+// import Hypercharged from "hypercharged";
+
+const hypercharged = new Hypercharged({
+    input: {
+        url: "http://example.com",
+    },
+    output: {
+        folder: {
+            path: __dirname,
+        },
+    },
+});
+
+const callback = async page => {
+    await page.waitFor(".card");
+};
+
+hypercharged.addUrls(["/", "/about", "/contact-us"], callback);
+
+(async () => {
+    await hypercharged.render();
+})();
+```
+
+You can check the list of all the available method on the puppeteer's `page` object in [the dedicated documentation](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page).
