@@ -4,6 +4,7 @@ import * as puppeteer from "puppeteer";
 import { isAbsolute } from "path";
 import { sync as mkdirpSync } from "mkdirp";
 import { writeFileSync } from "fs";
+import { JSDOM } from "jsdom";
 import Options from "./Options";
 
 class Hypercharged {
@@ -261,7 +262,24 @@ class Hypercharged {
                     continue;
                 }
 
-                const content = await page.content();
+                let content = await page.content();
+                const jsdom = new JSDOM(content);
+
+                const scripts = jsdom.window.document.querySelectorAll(
+                    "script:not([type]), script[type='text/javascript'], link[as='script']",
+                );
+
+                for (const script of scripts) {
+                    const parent = script.parentNode;
+
+                    if (!parent) {
+                        continue;
+                    }
+
+                    parent.removeChild(script);
+                }
+
+                content = jsdom.serialize();
 
                 mkdirpSync(`${this.folder}/${url}`);
                 writeFileSync(`${this.folder}/${url}/index.html`, content);

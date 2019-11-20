@@ -2,8 +2,9 @@ import "mocha-sinon";
 import { sync as isDirectorySync } from "is-directory";
 import { sync as rimrafSync } from "rimraf";
 import { expect } from "chai";
-import { existsSync, unlinkSync } from "fs";
+import { existsSync, unlinkSync, readFileSync } from "fs";
 import { sync as globSync } from "glob";
+import { JSDOM } from "jsdom";
 import Hypercharged from "../../lib/index";
 
 afterEach(function() {
@@ -174,5 +175,38 @@ describe(".render()", function() {
             .render();
 
         expect(isDirectorySync(__dirname + "/prerendered")).to.be.true;
+    });
+
+    it("should remove all the script tags", async function() {
+        this.timeout(10000);
+
+        await new Hypercharged({
+            input: {
+                url: "https://stackoverflow.com",
+            },
+            output: {
+                folder: {
+                    path: __dirname + "/prerendered",
+                    createIfNotExist: true,
+                },
+            },
+        })
+            .addUrl(
+                "/questions/13125817/how-to-remove-elements-that-were-fetched-using-queryselectorall",
+            )
+            .render();
+
+        const content = readFileSync(
+            __dirname +
+                "/prerendered/questions/13125817/how-to-remove-elements-that-were-fetched-using-queryselectorall/index.html",
+        ).toString();
+
+        const jsdom = new JSDOM(content);
+
+        const scripts = jsdom.window.document.querySelectorAll(
+            "script:not([type]), script[type='text/javascript'], link[as='script']",
+        );
+
+        expect(scripts).to.be.empty;
     });
 });

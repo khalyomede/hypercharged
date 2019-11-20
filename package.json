@@ -57,6 +57,7 @@
     "dependencies": {
         "@hapi/joi": "16.*",
         "is-directory": "0.*",
+        "jsdom": "15.*",
         "mkdirp": "0.*"
     },
     "files": [
