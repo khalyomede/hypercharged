@@ -82,7 +82,7 @@ describe(".removeUrls()", function() {
                     },
                 },
             }).removeUrls();
-        }).to.throw(Error, `expected parameter "urls" to be an Array`);
+        }).to.throw(Error, `"value" is required`);
     });
 
     it("should throw an Error if the parameter urls is not an Array", function() {
@@ -97,7 +97,7 @@ describe(".removeUrls()", function() {
                     },
                 },
             }).removeUrls(42);
-        }).to.throw(Error, `expected parameter "urls" to be an Array`);
+        }).to.throw(Error, `"value" must be an array`);
     });
 
     it("should throw an Error if the parameter urls is not an Array of only Strings", function() {
@@ -112,6 +112,6 @@ describe(".removeUrls()", function() {
                     },
                 },
             }).removeUrls(["/", "/about", 42]);
-        }).to.throw(Error, `"value" must be a string`);
+        }).to.throw(Error, `"[2]" must be a string`);
     });
 });
