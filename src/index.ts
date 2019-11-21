@@ -8,14 +8,58 @@ import { JSDOM } from "jsdom";
 import Options from "./Options";
 
 class Hypercharged {
+    /**
+     * Stores the port that given via the constructor.
+     *
+     * @since 0.1.0
+     */
     public port: string;
+
+    /**
+     * Stores the folder path given via the constructor.
+     *
+     * @since 0.1.0
+     */
     public folder: string;
+
+    /**
+     * Stores the create folder if not exist boolean given via the constructor.
+     *
+     * @since 0.1.0
+     */
     public createFolderIfNotExist: Boolean;
+
+    /**
+     * Stores the website url to parse, given via the constructor.
+     *
+     * @since 0.1.0
+     */
     public baseUrl: string;
 
+    /**
+     * @todo to remove
+     */
     protected options: Options;
+
+    /**
+     * Stores the list of urls to render.
+     *
+     * @since 0.1.0
+     */
     protected urls: Array<string>;
+
+    /**
+     * Stores a dictionnary that match the url and their callback, which are the puppeteer "Page" action to perform before rendering the url.
+     *
+     * @since 0.1.0
+     */
     protected callbacks: Object;
+
+    /**
+     * Stores true if the user wants to see debug information on console, like which page is being rendered.
+     *
+     * @since 0.1.0
+     */
     protected debug: boolean;
 
     /**
@@ -28,6 +72,18 @@ class Hypercharged {
      * @return {Hypercharged}
      * @throws {TypeError} If the options is not an object.
      * @throws {Error} If the options is not valid.
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
      */
     public constructor(options: Options) {
         const schema = Joi.object({
@@ -78,6 +134,20 @@ class Hypercharged {
      * @param {String} url
      * @return {Hypercharged}
      * @throws {TypeError} If the parameter "url" is not a string.
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
+     *
+     * hypercharged.addUrl("/");
      */
     public addUrl(
         url: string,
@@ -114,7 +184,22 @@ class Hypercharged {
      *
      * @param {Array<string>} urls
      * @param {Function} callback
+     * @return {Hypercharged}
      * @throws {Error} if the parameter "urls" is not valid.
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
+     *
+     * hypercharged.addUrls(["/", "/about", "/contact-us"]);
      */
     public addUrls(
         urls: Array<string>,
@@ -141,6 +226,24 @@ class Hypercharged {
      *
      * @param {String} url
      * @return {Boolean}
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
+     *
+     * if (hypercharged.hasUrl("/")) {
+     * 		console.log("this instance got the home url");
+     * } else {
+     * 		console.log("this instance does not have the home url yet");
+     * }
      */
     public hasUrl(url: string): Boolean {
         const { value, error } = Joi.string()
@@ -158,6 +261,31 @@ class Hypercharged {
         return this.urls.includes(url);
     }
 
+    /**
+     * Check if all the urls have been added for prerendering. Note that if at least one url have not been added, this method will return false.
+     *
+     * @param {Array<String>} urls
+     * @return {Boolean}
+     * @throws {Error} If the parameter "urls" is not an array of strings.
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
+     *
+     * if (hypercharged.hasUrls(["/", "/about"])) {
+     * 		console.log("this instance got the home and about urls");
+     * } else {
+     * 		console.log("this instance does not have the home and about urls yet");
+     * }
+     */
     public hasUrls(urls: Array<string>): Boolean {
         const { value, error } = Joi.array()
             .required()
@@ -176,6 +304,21 @@ class Hypercharged {
      *
      * @param {String} urlToRemove
      * @return {Hypercharged}
+     * @throws {Error} If the parameter "urlToRemove" is not a string.
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
+     *
+     * hypercharged.removeUrl("/");
      */
     public removeUrl(urlToRemove: string): Hypercharged {
         const { value, error } = Joi.string()
@@ -201,6 +344,20 @@ class Hypercharged {
      * @param {Array<string>} urls
      * @return {Hypercharged}
      * @throws {Error} If the parameter "urls" is not an Array
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
+     *
+     * hypercharged.removeUrls(["/", "/about"]);
      */
     public removeUrls(urls: Array<string>): Hypercharged {
         if (!Array.isArray(urls)) {
@@ -214,6 +371,29 @@ class Hypercharged {
         return this;
     }
 
+    /**
+     * Render the urls into the folder you chose when creating this instance.
+     *
+     * @param {Object} options
+     * @return {Promise<Hypercharged>}
+     * @throws {Error} If the parameter "options" is not an object.
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
+     *
+     * (async () => {
+     * 		await hypercharged.render();
+     * })();
+     */
     public async render(options: Object = {}): Promise<Hypercharged> {
         const { value, error } = Joi.object().validate(options);
 
@@ -296,6 +476,27 @@ class Hypercharged {
         return this;
     }
 
+    /**
+     * Sets the debug mode. If set to true, this will print additional information like which page is being rendered, in the console.
+     *
+     * @param {Boolean} debugMode
+     * @return {Hypercharged}
+     * @throws {Error} If the parameter "debugMode" is not a boolean.
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
+     *
+     * hypercharged.setDebug(true);
+     */
     public setDebug(debugMode: boolean): Hypercharged {
         const { value, error } = Joi.boolean()
             .required()
@@ -314,6 +515,20 @@ class Hypercharged {
      * Set the debug mode to true. This will print additional information like which page is being rendered, in the console.
      *
      * @return {Hypercharged}
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
+     *
+     * hypercharged.enableDebug();
      */
     public enableDebug(): Hypercharged {
         this.debug = true;
@@ -325,6 +540,20 @@ class Hypercharged {
      * Set the debug mode to false. This will prevent printing additional information in the console.
      *
      * @return {Hypercharged}
+     * @since 0.1.0
+     * @example
+     * const hypercharged = new Hypercharged({
+     * 		input: {
+     * 			url: "http://example.com"
+     * 		},
+     * 		output: {
+     * 			folder: {
+     * 				path: __dirname
+     * 			}
+     * 		}
+     * });
+     *
+     * hypercharged.disableDebug();
      */
     public disableDebug(): Hypercharged {
         this.debug = false;
