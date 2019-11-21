@@ -34,13 +34,13 @@ Learn more about the difference [here](https://github.com/GoogleChrome/puppeteer
 With npm:
 
 ```bash
-npm install --save-dev puppeteer hypercharged
+npm install --save-dev puppeteer@2.* hypercharged
 ```
 
 Or with Yarn:
 
 ```bash
-yarn add --dev puppeteer hypercharged
+yarn add --dev puppeteer@2.* hypercharged
 ```
 
 ## Usage
