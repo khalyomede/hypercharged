@@ -57,7 +57,7 @@ yarn add --dev puppeteer@2.* hypercharged
 In this example, we will render the home page of [http://example.com](http://example.com)
 
 ```javascript
-const Hypercharged = require("../lib/index").default;
+const Hypercharged = require("hypercharged").default;
 // import Hypercharged from "hypercharged";
 
 const hypercharged = new Hypercharged({
@@ -93,7 +93,7 @@ your-project
 Hypercharged does not create the output folder if you do not tell it do to so. In this example, we will instruct it to create it if it does not exist.
 
 ```javascript
-const Hypercharged = require("../lib/index").default;
+const Hypercharged = require("hypercharged").default;
 // import Hypercharged from "hypercharged";
 
 const hypercharged = new Hypercharged({
@@ -131,7 +131,7 @@ your-project
 In this example, we will generated multiple pages in a given folder.
 
 ```javascript
-const Hypercharged = require("../lib/index").default;
+const Hypercharged = require("hypercharged").default;
 // import Hypercharged from "hypercharged";
 
 const hypercharged = new Hypercharged({
@@ -175,7 +175,7 @@ If, like me, you are building a single page application, or any other website th
 In this example, we will use custom Puppeteer commands to overpass this limitation.
 
 ```javascript
-const Hypercharged = require("../lib/index").default;
+const Hypercharged = require("hypercharged").default;
 // import Hypercharged from "hypercharged";
 
 const hypercharged = new Hypercharged({
@@ -221,7 +221,7 @@ Hypercharged runs a Chrome instance in headless mode using puppeteer. You can ad
 In this example we will tell puppeteer to show the Chrome window while it runs. This is very interesting to troubleshoot issues and understand why something is not going like expected.
 
 ```javascript
-const Hypercharged = require("../lib/index").default;
+const Hypercharged = require("hypercharged").default;
 // import Hypercharged from "hypercharged";
 
 const hypercharged = new Hypercharged({
@@ -251,7 +251,7 @@ You can learn more about which options you can use by reading the [documentation
 In this example, we will activate the debug mode to see in the console what is happening with your urls.
 
 ```javascript
-const Hypercharged = require("../lib/index").default;
+const Hypercharged = require("hypercharged").default;
 // import Hypercharged from "hypercharged";
 
 const hypercharged = new Hypercharged({
@@ -286,7 +286,7 @@ rendered
 In this example, we have a lots of urls that needs a same "put the web page on hold" function before copying the content.
 
 ```javascript
-const Hypercharged = require("../lib/index").default;
+const Hypercharged = require("hypercharged").default;
 // import Hypercharged from "hypercharged";
 
 const hypercharged = new Hypercharged({
