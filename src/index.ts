@@ -6,6 +6,7 @@ import { sync as mkdirpSync } from "mkdirp";
 import { writeFileSync } from "fs";
 import { JSDOM } from "jsdom";
 import Options from "./Options";
+import { Browser, Page } from "puppeteer";
 
 class Hypercharged {
     /**
@@ -61,6 +62,20 @@ class Hypercharged {
      * @since 0.1.0
      */
     protected debug: boolean;
+
+    /**
+     * Stores puppeteer launch options.
+     *
+     * @since 0.3.0
+     */
+    protected renderOptions: Object;
+
+    /**
+     * Stores the page being rendered.
+     *
+     * @since 0.3.0
+     */
+    protected currentRenderedPage: Page;
 
     /**
      * Constructor.
@@ -366,15 +381,9 @@ class Hypercharged {
         }
 
         if (this.urls.length > 0) {
-            const browser = await puppeteer.launch({
-                defaultViewport: {
-                    width: 0,
-                    height: 0,
-                },
-                args: ["--start-fullscreen"],
-                ...options,
-            });
+            this.renderOptions = options;
 
+            const browser = await this._getBrowser();
             const page = await browser.newPage();
 
             for (const url of this.urls) {
@@ -406,24 +415,9 @@ class Hypercharged {
                     continue;
                 }
 
-                let content = await page.content();
-                const jsdom = new JSDOM(content);
+                this.currentRenderedPage = page;
 
-                const scripts = jsdom.window.document.querySelectorAll(
-                    "script:not([type]), script[type='text/javascript'], link[as='script']",
-                );
-
-                for (const script of scripts) {
-                    const parent = script.parentNode;
-
-                    if (!parent) {
-                        continue;
-                    }
-
-                    parent.removeChild(script);
-                }
-
-                content = jsdom.serialize();
+                let content = await this._getPageContent();
 
                 mkdirpSync(`${this.folder}/${url}`);
                 writeFileSync(`${this.folder}/${url}/index.html`, content);
@@ -560,6 +554,42 @@ class Hypercharged {
         }
 
         return value;
+    }
+
+    protected async _getBrowser(): Promise<Browser> {
+        const browser = await puppeteer.launch({
+            defaultViewport: {
+                width: 0,
+                height: 0,
+            },
+            args: ["--start-fullscreen"],
+            ...this.renderOptions,
+        });
+
+        return browser;
+    }
+
+    protected async _getPageContent(): Promise<string> {
+        let content = await this.currentRenderedPage.content();
+        const jsdom = new JSDOM(content);
+
+        const scripts = jsdom.window.document.querySelectorAll(
+            "script:not([type]), script[type='text/javascript'], link[as='script']",
+        );
+
+        for (const script of scripts) {
+            const parent = script.parentNode;
+
+            if (!parent) {
+                continue;
+            }
+
+            parent.removeChild(script);
+        }
+
+        content = jsdom.serialize();
+
+        return content;
     }
 }
 
