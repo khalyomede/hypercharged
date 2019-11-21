@@ -86,27 +86,7 @@ class Hypercharged {
      * });
      */
     public constructor(options: Options) {
-        const schema = Joi.object({
-            input: Joi.object({
-                url: Joi.string().required(),
-                port: Joi.number()
-                    .integer()
-                    .min(1001)
-                    .default(3000),
-            }).required(),
-            output: Joi.object({
-                folder: Joi.object({
-                    path: Joi.string().required(),
-                    createIfNotExist: Joi.boolean().default(false),
-                }).required(),
-            }).required(),
-        }).required();
-
-        const { value, error } = schema.validate(options);
-
-        if (error) {
-            throw new Error(error.message);
-        }
+        const value = this._validateOptions(options);
 
         this.port = value.input.port;
         this.folder = value.output.folder.path;
@@ -554,6 +534,32 @@ class Hypercharged {
         if (error) {
             throw new Error(error.message);
         }
+    }
+
+    protected _validateOptions(options: Options) {
+        const schema = Joi.object({
+            input: Joi.object({
+                url: Joi.string().required(),
+                port: Joi.number()
+                    .integer()
+                    .min(1001)
+                    .default(3000),
+            }).required(),
+            output: Joi.object({
+                folder: Joi.object({
+                    path: Joi.string().required(),
+                    createIfNotExist: Joi.boolean().default(false),
+                }).required(),
+            }).required(),
+        }).required();
+
+        const { value, error } = schema.validate(options);
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        return value;
     }
 }
 
