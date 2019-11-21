@@ -61,6 +61,9 @@
         "jsdom": "15.*",
         "mkdirp": "0.*"
     },
+    "peerDependencies": {
+        "puppeteer": "2.*"
+    },
     "files": [
         "lib/index.js"
     ]
