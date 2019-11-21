@@ -205,14 +205,7 @@ class Hypercharged {
         urls: Array<string>,
         callback: Function = function() {},
     ): Hypercharged {
-        const { value, error } = Joi.array()
-            .required()
-            .items(Joi.string())
-            .validate(urls);
-
-        if (error) {
-            throw new Error(error.message);
-        }
+        this._validateUrls(urls);
 
         for (const url of urls) {
             this.addUrl(url, callback);
@@ -287,14 +280,7 @@ class Hypercharged {
      * }
      */
     public hasUrls(urls: Array<string>): Boolean {
-        const { value, error } = Joi.array()
-            .required()
-            .items(Joi.string())
-            .validate(urls);
-
-        if (error) {
-            throw new Error(error.message);
-        }
+        this._validateUrls(urls);
 
         return urls.filter(url => this.hasUrl(url)).length === urls.length;
     }
@@ -360,9 +346,7 @@ class Hypercharged {
      * hypercharged.removeUrls(["/", "/about"]);
      */
     public removeUrls(urls: Array<string>): Hypercharged {
-        if (!Array.isArray(urls)) {
-            throw new Error(`expected parameter "urls" to be an Array`);
-        }
+        this._validateUrls(urls);
 
         for (const url of urls) {
             this.removeUrl(url);
@@ -559,6 +543,17 @@ class Hypercharged {
         this.debug = false;
 
         return this;
+    }
+
+    protected _validateUrls(urls: Array<String>): void {
+        const { value, error } = Joi.array()
+            .required()
+            .items(Joi.string())
+            .validate(urls);
+
+        if (error) {
+            throw new Error(error.message);
+        }
     }
 }
 
