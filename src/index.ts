@@ -589,8 +589,10 @@ class Hypercharged {
         let content = await this.currentRenderedPage.content();
         const jsdom = new JSDOM(content);
 
-        const scripts = jsdom.window.document.querySelectorAll(
-            "script:not([type]), script[type='text/javascript'], link[as='script']",
+        const scripts = Array.from(
+            jsdom.window.document.querySelectorAll(
+                "script:not([type]), script[type='text/javascript'], link[as='script']",
+            ),
         );
 
         for (const script of scripts) {
