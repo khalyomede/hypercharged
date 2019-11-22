@@ -54,7 +54,7 @@ class Hypercharged {
      *
      * @since 0.1.0
      */
-    protected callbacks: Object;
+    protected callbacks: { [key: string]: Function };
 
     /**
      * Stores true if the user wants to see debug information on console, like which page is being rendered.
@@ -75,7 +75,7 @@ class Hypercharged {
      *
      * @since 0.3.0
      */
-    protected currentRenderedPage: Page;
+    protected currentRenderedPage?: Page;
 
     /**
      * Constructor.
@@ -110,6 +110,18 @@ class Hypercharged {
         this.urls = [];
         this.callbacks = {};
         this.debug = false;
+        this.renderOptions = {};
+        this.currentRenderedPage = undefined;
+        this.options = {
+            input: {
+                url: "",
+            },
+            output: {
+                folder: {
+                    path: "",
+                },
+            },
+        };
 
         if (
             !this.createFolderIfNotExist &&
@@ -570,6 +582,10 @@ class Hypercharged {
     }
 
     protected async _getPageContent(): Promise<string> {
+        if (this.currentRenderedPage === undefined) {
+            return "";
+        }
+
         let content = await this.currentRenderedPage.content();
         const jsdom = new JSDOM(content);
 
