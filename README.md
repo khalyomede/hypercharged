@@ -13,11 +13,7 @@ Generates a prerendered site from your original website.
 
 ## About
 
-I created this library because I used to exploit a home made tool to generate a prerendered website from my original single page application. This prerendered version would help me pass through the SEO issue caused by bots not being able to execute Javascript. The result let bots parse an HTML generated result that help them understand the content of my website without executing Javascript. To do so, I use to add an Apache rule to redirect bots to the prerendered version of my website.
-
-However, the result can be used differently. I imagine for example to serve the prerendered result to **every** users, in order to reduce the Javascript parsing/execution time.
-
-Open sourcing this project would eventually help me produce a better and more reliable library as I have in mind the community expectations.
+I created this library because I used to exploit a home made tool to generate a prerendered website from my original single page application. This prerendered version would help me pass through the SEO issue caused by bots not being able to execute Javascript. The result let bots parse an HTML generated result that help them understand the content of my website without executing Javascript. To do so, I configure my `.htaccess` Apache file rule to redirect bots to the prerendered version of my website.
 
 ## Installation
 
