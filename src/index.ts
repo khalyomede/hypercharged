@@ -381,6 +381,17 @@ class Hypercharged {
             const browser = await this._getBrowser();
             const page = await browser.newPage();
 
+            if (this.debug) {
+                page.on("pageerror", pageError => {
+                    /* tslint:disable:no-console */
+                    console.log(
+                        "an error have been detected in the console while rendering your page, it has been printed below",
+                    );
+                    console.log(pageError);
+                    /* tslint:enable:no-console */
+                });
+            }
+
             for (const url of this.urls) {
                 if (this.debug) {
                     /* tslint:disable:no-console */
