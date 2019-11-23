@@ -1,13 +1,16 @@
-import { sync as isDirectorySync } from "is-directory";
 import * as Joi from "@hapi/joi";
-import * as puppeteer from "puppeteer";
-import { isAbsolute } from "path";
-import { sync as mkdirpSync } from "mkdirp";
 import { writeFileSync } from "fs";
+import { sync as isDirectorySync } from "is-directory";
 import { JSDOM } from "jsdom";
-import Options from "./Options";
+import { sync as mkdirpSync } from "mkdirp";
+import { isAbsolute } from "path";
+import * as puppeteer from "puppeteer";
 import { Browser, Page } from "puppeteer";
+import Options from "./Options";
 
+/**
+ * Prerenders urls of a website into a folder.
+ */
 class Hypercharged {
     /**
      * Stores the port that given via the constructor.
@@ -36,11 +39,6 @@ class Hypercharged {
      * @since 0.1.0
      */
     public baseUrl: string;
-
-    /**
-     * @todo to remove
-     */
-    protected options: Options;
 
     /**
      * Stores the list of urls to render.
@@ -112,16 +110,6 @@ class Hypercharged {
         this.debug = false;
         this.renderOptions = {};
         this.currentRenderedPage = undefined;
-        this.options = {
-            input: {
-                url: "",
-            },
-            output: {
-                folder: {
-                    path: "",
-                },
-            },
-        };
 
         if (
             !this.createFolderIfNotExist &&
@@ -156,10 +144,7 @@ class Hypercharged {
      *
      * hypercharged.addUrl("/");
      */
-    public addUrl(
-        url: string,
-        callback: Function = function() {},
-    ): Hypercharged {
+    public addUrl(url: string, callback: Function): Hypercharged {
         const schema = Joi.string().required();
 
         const { value, error } = schema.validate(url);
@@ -168,9 +153,7 @@ class Hypercharged {
             throw new TypeError(error.message);
         }
 
-        const validation = Joi.function()
-            .required()
-            .validate(callback);
+        const validation = Joi.function().validate(callback);
 
         if (validation.error) {
             throw new Error(validation.error.message);
@@ -181,7 +164,10 @@ class Hypercharged {
         }
 
         this.urls.push(value);
-        this.callbacks[value] = callback;
+
+        if (callback instanceof Function) {
+            this.callbacks[value] = callback;
+        }
 
         return this;
     }
@@ -208,10 +194,7 @@ class Hypercharged {
      *
      * hypercharged.addUrls(["/", "/about", "/contact-us"]);
      */
-    public addUrls(
-        urls: Array<string>,
-        callback: Function = function() {},
-    ): Hypercharged {
+    public addUrls(urls: Array<string>, callback: Function): Hypercharged {
         this._validateUrls(urls);
 
         for (const url of urls) {
@@ -400,42 +383,56 @@ class Hypercharged {
 
             for (const url of this.urls) {
                 if (this.debug) {
+                    /* tslint:disable:no-console */
                     console.log(`rendering ${url}...`);
+                    /* tslint:enable:no-console */
                 }
 
                 try {
                     await page.goto(`${this.baseUrl}${url}`);
                 } catch (exception) {
                     if (this.debug) {
+                        /* tslint:disable:no-console */
                         console.log(`failed to connect to the page`);
                         console.log(exception);
+                        /* tslint:enable:no-console */
                     }
 
                     continue;
                 }
 
-                try {
-                    await this.callbacks[url](page);
-                } catch (exception) {
-                    if (this.debug) {
-                        console.log(
-                            "an error occurred while running your algorithm to put the web page on hold",
-                        );
-                        console.log(exception);
-                    }
+                if (url in this.callbacks) {
+                    const callback = this.callbacks[url];
 
-                    continue;
+                    if (callback instanceof Function) {
+                        try {
+                            await callback(page);
+                        } catch (exception) {
+                            if (this.debug) {
+                                /* tslint:disable:no-console */
+                                console.log(
+                                    "an error occurred while running your algorithm to put the web page on hold",
+                                );
+                                console.log(exception);
+                                /* tslint:enable:no-console */
+                            }
+
+                            continue;
+                        }
+                    }
                 }
 
                 this.currentRenderedPage = page;
 
-                let content = await this._getPageContent();
+                const content = await this._getPageContent();
 
                 mkdirpSync(`${this.folder}/${url}`);
                 writeFileSync(`${this.folder}/${url}/index.html`, content);
 
                 if (this.debug) {
+                    /* tslint:disable:no-console */
                     console.log(`rendered`);
+                    /* tslint:enable:no-console */
                 }
             }
 
@@ -531,6 +528,15 @@ class Hypercharged {
         return this;
     }
 
+    /**
+     * Throws an exception if the parameter is not an Array of Strings.
+     *
+     * @param {Array<String>} urls
+     * @return {Void}
+     * @throws {Error} If the parameter is undefined.
+     * @throws {Error} If the parameter is not an Array.
+     * @throws {Error} If the parameter is not an Array of Strings.
+     */
     protected _validateUrls(urls: Array<String>): void {
         const { value, error } = Joi.array()
             .required()
@@ -542,19 +548,31 @@ class Hypercharged {
         }
     }
 
+    /**
+     * Throws an exception if the parameter is not compatible with the definition of an Options.
+     *
+     * @param {Object} options
+     * @param {Object} options.input
+     * @param {String} options.input.url
+     * @param {Number} options.input.port=3000
+     * @param {Object} options.output
+     * @param {Object} options.output.folder
+     * @param {String} options.output.folder.path
+     * @param {Boolean} options.output.folder.createIfNotExist
+     */
     protected _validateOptions(options: Options) {
         const schema = Joi.object({
             input: Joi.object({
-                url: Joi.string().required(),
                 port: Joi.number()
                     .integer()
                     .min(1001)
                     .default(3000),
+                url: Joi.string().required(),
             }).required(),
             output: Joi.object({
                 folder: Joi.object({
-                    path: Joi.string().required(),
                     createIfNotExist: Joi.boolean().default(false),
+                    path: Joi.string().required(),
                 }).required(),
             }).required(),
         }).required();
@@ -568,19 +586,29 @@ class Hypercharged {
         return value;
     }
 
+    /**
+     * Returns an instance of Puppeteer's Browser, configured with the desired options.
+     *
+     * @return {Promise<Browser>}
+     */
     protected async _getBrowser(): Promise<Browser> {
         const browser = await puppeteer.launch({
-            defaultViewport: {
-                width: 0,
-                height: 0,
-            },
             args: ["--start-fullscreen"],
+            defaultViewport: {
+                height: 0,
+                width: 0,
+            },
             ...this.renderOptions,
         });
 
         return browser;
     }
 
+    /**
+     * Returns the content of the page being rendered.
+     *
+     * @return {Promise<String>}
+     */
     protected async _getPageContent(): Promise<string> {
         if (this.currentRenderedPage === undefined) {
             return "";
