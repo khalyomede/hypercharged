@@ -19,6 +19,8 @@ before(function() {
         open: false,
         port: 3000,
     });
+
+    this.timeout(10000);
 });
 
 after(function() {
