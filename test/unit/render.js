@@ -304,4 +304,48 @@ describe(".render()", function() {
 
         expect(scripts).to.be.empty;
     });
+
+    it("should print in the console that the page logged some errors if it did (and the debug mode is enabled)", async function() {
+        mkdirp(__dirname + "/website");
+        writeFileSync(
+            __dirname + "/website/index.html",
+            `
+			<!DOCTYPE html>
+			<html>
+				<head>
+					<meta charset="utf-8">
+					<title>My website</title>
+					<script type="text/javascript">
+						const a = 42;
+						const a = 43; // should throw "Uncaught SyntaxError: Identifier 'a' has already been declared"
+					</script>
+				</head>
+				<body>
+					<h1>Home</h1>
+				</body>
+			</html>
+		`,
+        );
+
+        await new Hypercharged({
+            input: {
+                url: "http://localhost:3000",
+            },
+            output: {
+                folder: {
+                    path: __dirname + "/prerendered",
+                    createIfNotExist: true,
+                },
+            },
+        })
+            .addUrl("/")
+            .enableDebug()
+            .render();
+
+        expect(
+            console.log.calledWith(
+                "an error have been detected in the console while rendering your page, it has been printed below",
+            ),
+        ).to.be.true;
+    });
 });
