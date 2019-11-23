@@ -2,10 +2,28 @@ import "mocha-sinon";
 import { sync as isDirectorySync } from "is-directory";
 import { sync as rimrafSync } from "rimraf";
 import { expect } from "chai";
-import { existsSync, unlinkSync, readFileSync } from "fs";
+import { unlinkSync, readFileSync, writeFileSync } from "fs";
 import { sync as globSync } from "glob";
 import { JSDOM } from "jsdom";
+import mkdirp, { sync as mkdirpSync } from "mkdirp";
 import Hypercharged from "../../lib/index";
+import browserSync from "browser-sync";
+
+before(function() {
+    const browser = browserSync.create("instance1");
+
+    browser.init({
+        server: {
+            baseDir: __dirname + "/website",
+        },
+        open: false,
+        port: 3000,
+    });
+});
+
+after(function() {
+    browserSync.get("instance1").exit();
+});
 
 afterEach(function() {
     const files = globSync(__dirname + "/**/*.html");
@@ -20,6 +38,10 @@ afterEach(function() {
 
     if (isDirectorySync(__dirname + "/prerendered")) {
         rimrafSync(__dirname + "/prerendered");
+    }
+
+    if (isDirectorySync(__dirname + "/website")) {
+        rimrafSync(__dirname + "/website");
     }
 });
 
@@ -69,11 +91,23 @@ describe(".render()", function() {
     });
 
     it("should render the desired route", async function() {
-        this.timeout(10000);
+        const html = `<!DOCTYPE html>
+			<html>
+				<head>
+					<meta charset="utf-8">
+					<title>My website</title>
+				</head>
+				<body>
+					<h1>Home page</h1>	
+				</body>
+			</html>`;
+
+        mkdirpSync(__dirname + "/website");
+        writeFileSync(__dirname + "/website/index.html", html);
 
         await new Hypercharged({
             input: {
-                url: "http://example.com",
+                url: "http://localhost:3000",
             },
             output: {
                 folder: {
@@ -84,35 +118,77 @@ describe(".render()", function() {
             .addUrl("/")
             .render();
 
-        expect(existsSync(__dirname + "/index.html")).to.be.true;
+        expect(
+            readFileSync(__dirname + "/index.html")
+                .toString()
+                .replace(/\n|\t/gm, ""),
+        ).to.be.equal(html.replace(/\n|\t/gm, ""));
     });
 
     it("should render sub pages", async function() {
-        this.timeout(10000);
+        const html = `
+			<!DOCTYPE html>
+			<html>
+				<head>
+					<meta charset="utf-8">
+					<title>My website</title>
+				</head>
+				<body>
+					<h1>Avocado - Contact us</h1>
+				</body>
+			</html>
+		`;
+
+        mkdirpSync(__dirname + "/website/avocado/contact-us");
+        writeFileSync(
+            __dirname + "/website/avocado/contact-us/index.html",
+            html,
+        );
 
         await new Hypercharged({
             input: {
-                url: "https://en.wikipedia.org/",
+                url: "http://localhost:3000",
             },
             output: {
                 folder: {
-                    path: __dirname,
+                    path: __dirname + "/prerendered",
+                    createIfNotExist: true,
                 },
             },
         })
-            .addUrls(["/wiki/Wikipedia", "/wiki/Bylaws"])
+            .addUrl("/avocado/contact-us")
             .render();
 
-        expect(existsSync(__dirname + "/wiki/Wikipedia/index.html")).to.be.true;
-        expect(existsSync(__dirname + "/wiki/Bylaws/index.html")).to.be.true;
+        expect(
+            readFileSync(
+                __dirname + "/prerendered/avocado/contact-us/index.html",
+            )
+                .toString()
+                .replace(/\n|\t/gm, ""),
+        ).to.be.equal(html.replace(/\n|\t/gm, ""));
     });
 
     it("should print debug informations", async function() {
-        this.timeout(10000);
+        mkdirpSync(__dirname + "/website");
+        writeFileSync(
+            __dirname + "/website/index.html",
+            `
+			<!DOCTYPE html>
+			<html>
+				<head>
+					<meta charset="utf-8">
+					<title>My website</title>
+				</head>
+				<body>
+					<h1>Home</h1>
+				</body>
+			</html>
+		`,
+        );
 
         await new Hypercharged({
             input: {
-                url: "https://en.wikipedia.org",
+                url: "http://localhost:3000",
             },
             output: {
                 folder: {
@@ -120,21 +196,21 @@ describe(".render()", function() {
                 },
             },
         })
-            .addUrl("/wiki/Main_Page")
+            .addUrl("/")
             .enableDebug()
             .render();
 
-        expect(console.log.calledWith("rendering /wiki/Main_Page...")).to.be
-            .true;
+        expect(console.log.calledWith("rendering /...")).to.be.true;
         expect(console.log.calledWith("rendered")).to.be.true;
     });
 
     it("should print an error if the custom algorithm to put the web page on hold has thrown an exception", async function() {
-        this.timeout(40000);
+        mkdirp(__dirname + "/website");
+        writeFileSync(__dirname + "/website/index.html", "");
 
         await new Hypercharged({
             input: {
-                url: "http://example.com",
+                url: "http://localhost:3000",
             },
             output: {
                 folder: {
@@ -158,11 +234,12 @@ describe(".render()", function() {
     });
 
     it("should create the folder if it does not exists", async function() {
-        this.timeout(10000);
+        mkdirpSync(__dirname + "/website");
+        writeFileSync(__dirname + "/website/index.html", "");
 
         await new Hypercharged({
             input: {
-                url: "https://en.wikipedia.org/",
+                url: "http://localhost:3000",
             },
             output: {
                 folder: {
@@ -171,18 +248,39 @@ describe(".render()", function() {
                 },
             },
         })
-            .addUrl("/wiki/Paris")
+            .addUrl("/")
             .render();
 
         expect(isDirectorySync(__dirname + "/prerendered")).to.be.true;
     });
 
     it("should remove all the script tags", async function() {
-        this.timeout(10000);
+        mkdirpSync(__dirname + "/website");
+        writeFileSync(
+            __dirname + "/website/index.html",
+            `
+			<!DOCTYPE html>
+			<html>
+				<head>
+					<meta charset="utf-8">
+					<title>My website</title>
+					<link rel="preload" as="script" href="https://unpkg.com/vuex" />
+				</head>
+				<body>
+					<h1>Home</h1>
+					<script type="text/javascript">
+						console.log("hello world");
+					</script>
+					<script type="text/javascript" src="https://unpkg.com/vue"></script>
+					<script src="https://unpkg.com/vue-router"></script>
+				</bodt>
+			</html>
+		`,
+        );
 
         await new Hypercharged({
             input: {
-                url: "https://stackoverflow.com",
+                url: "http://localhost:3000",
             },
             output: {
                 folder: {
@@ -191,14 +289,11 @@ describe(".render()", function() {
                 },
             },
         })
-            .addUrl(
-                "/questions/13125817/how-to-remove-elements-that-were-fetched-using-queryselectorall",
-            )
+            .addUrl("/")
             .render();
 
         const content = readFileSync(
-            __dirname +
-                "/prerendered/questions/13125817/how-to-remove-elements-that-were-fetched-using-queryselectorall/index.html",
+            __dirname + "/prerendered/index.html",
         ).toString();
 
         const jsdom = new JSDOM(content);
