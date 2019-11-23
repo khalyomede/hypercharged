@@ -7,6 +7,7 @@ const hypercharged = new Hypercharged({
     output: {
         folder: {
             path: __dirname + "/prerendered",
+            createIfNotExist: true,
         },
     },
 });
