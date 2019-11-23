@@ -1,6 +1,6 @@
 {
     "name": "hypercharged",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "Generates a prerendered site from your original website.",
     "main": "lib/index.js",
     "repository": "https://github.com/khalyomede/hypercharged",
