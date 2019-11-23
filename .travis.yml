@@ -9,3 +9,6 @@ after_success:
 env:
     global:
         - secure: N+2b3+gsiEQMSqrH4UPUOQzpsXdFTe5htJNS7X/6krrUcbNILLMLkX6RImGTn7I1hASc/niAXFsTe15AjGH6v581UpTHxxEYFiENGuAaW9UahAR1Uj34R/wgdZxa5lA0vftVxjVOnodyPXI5PzmanrJqVKWk0yLqWYDwlgY0Hw//XNqG8X3cfAGZp66kRHBo9Duk5sD5/wreZIz+3luCUnwiAmJaCKNhELyJoF8xhN7QqUDljqKI2bryvDpU50ae5Xf3EyAGIbotHfAcwcp2y3kEKN4TjWsTUJEdazbE+Fd2k2G3Y5iFXtzbhijrKpQkrszwyrsConE9hfCvdWdEwLe7scmEb53GI6FrP3YEdg+BHwP06B9aR89LmBtsswE1vod30Hc0/c+RiSRBPyU7L3QdEHZO+x8lmQTI5nmOHfiKhfKXidyCwp7d8AkOBnHrZMtZMOC3ZVMceE08BZUg9Ja5vqM3N++luyCVYG62f2hTf2itvCB6Czf29yMV6O3WibCSJYRRk9oCeNSX72+uFv8cbT9qMzpiG295htnGUgtnnuy5pxgMcDuh4tfKjZ1A/oCHIJtZPq+OGmQqmhogpTd5LCQOMN6b58DwEXCkiHj/AbQL0bdtq1/uv/j+aso886b4PWjThX7qu1aY47y7psTnbZQrqi3Q/1MfkWFDuEE=
+addons:
+    hosts:
+        - localhost
