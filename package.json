@@ -40,6 +40,7 @@
         "gulp-babel": "8.*",
         "gulp-npm-check": "1.*",
         "gulp-plumber": "1.*",
+        "gulp-tslint": "8.*",
         "gulp-typescript": "5.*",
         "mocha": "6.*",
         "mocha-sinon": "2.*",
@@ -49,6 +50,7 @@
         "rimraf": "3.*",
         "sinon": "7.*",
         "stryker-cli": "1.*",
+        "tslint": "5.*",
         "typescript": "3.*"
     },
     "scripts": {
