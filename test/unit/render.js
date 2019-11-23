@@ -19,8 +19,6 @@ before(function() {
         open: false,
         port: 3000,
     });
-
-    this.timeout(10000);
 });
 
 after(function() {
@@ -93,6 +91,8 @@ describe(".render()", function() {
     });
 
     it("should render the desired route", async function() {
+        this.timeout(10000);
+
         const html = `<!DOCTYPE html>
 			<html>
 				<head>
@@ -128,6 +128,8 @@ describe(".render()", function() {
     });
 
     it("should render sub pages", async function() {
+        this.timeout(10000);
+
         const html = `
 			<!DOCTYPE html>
 			<html>
@@ -171,6 +173,8 @@ describe(".render()", function() {
     });
 
     it("should print debug informations", async function() {
+        this.timeout(10000);
+
         mkdirpSync(__dirname + "/website");
         writeFileSync(
             __dirname + "/website/index.html",
@@ -207,6 +211,8 @@ describe(".render()", function() {
     });
 
     it("should print an error if the custom algorithm to put the web page on hold has thrown an exception", async function() {
+        this.timeout(10000);
+
         mkdirp(__dirname + "/website");
         writeFileSync(__dirname + "/website/index.html", "");
 
@@ -236,6 +242,8 @@ describe(".render()", function() {
     });
 
     it("should create the folder if it does not exists", async function() {
+        this.timeout(10000);
+
         mkdirpSync(__dirname + "/website");
         writeFileSync(__dirname + "/website/index.html", "");
 
@@ -257,6 +265,8 @@ describe(".render()", function() {
     });
 
     it("should remove all the script tags", async function() {
+        this.timeout(10000);
+
         mkdirpSync(__dirname + "/website");
         writeFileSync(
             __dirname + "/website/index.html",
@@ -308,6 +318,8 @@ describe(".render()", function() {
     });
 
     it("should print in the console that the page logged some errors if it did (and the debug mode is enabled)", async function() {
+        this.timeout(10000);
+
         mkdirp(__dirname + "/website");
         writeFileSync(
             __dirname + "/website/index.html",
