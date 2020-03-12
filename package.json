@@ -65,7 +65,7 @@
         "@hapi/joi": "16.*",
         "is-directory": "0.*",
         "jsdom": "15.*",
-        "mkdirp": "0.*"
+        "mkdirp": "1.0.0"
     },
     "peerDependencies": {
         "puppeteer": "2.*"
