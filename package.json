@@ -64,7 +64,7 @@
     "dependencies": {
         "@hapi/joi": "16.*",
         "is-directory": "0.*",
-        "jsdom": "15.*",
+        "jsdom": "16.*",
         "mkdirp": "0.*"
     },
     "peerDependencies": {
