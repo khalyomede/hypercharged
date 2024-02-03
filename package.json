@@ -62,7 +62,7 @@
         "release": "np"
     },
     "dependencies": {
-        "@hapi/joi": "16.*",
+        "@hapi/joi": "17.1.1",
         "is-directory": "0.*",
         "jsdom": "15.*",
         "mkdirp": "0.*"
